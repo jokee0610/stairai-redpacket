@@ -136,16 +136,6 @@ export default function Home() {
               <span>Follow @{twitterAccountToFollow}</span>
               <span className="ml-auto">→</span>
             </a>
-            <a
-              href={`https://twitter.com/${twitterAccountToFollow}`}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center gap-2 p-3 bg-blue-50 rounded-lg hover:bg-blue-100 transition"
-            >
-              <span>🔄</span>
-              <span>Retweet campaign post</span>
-              <span className="ml-auto">→</span>
-            </a>
           </div>
         </div>
 

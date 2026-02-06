@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { config } from '@/lib/config';
-import { verifyTwitterFollow, verifyTwitterRetweet } from '@/lib/twitter';
+import { verifyTwitterFollow } from '@/lib/twitter';
 import { signClaimTicket } from '@/lib/signer';
 import {
   getStats,
@@ -54,22 +54,12 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Verify Twitter tasks
-    const [isFollowing, hasRetweeted] = await Promise.all([
-      verifyTwitterFollow(normalizedHandle),
-      verifyTwitterRetweet(normalizedHandle),
-    ]);
+    // Verify Twitter follow
+    const isFollowing = await verifyTwitterFollow(normalizedHandle);
 
     if (!isFollowing) {
       return NextResponse.json(
         { error: `Must follow @${config.twitterAccountToFollow} on Twitter` },
-        { status: 400 }
-      );
-    }
-
-    if (!hasRetweeted) {
-      return NextResponse.json(
-        { error: 'Must retweet the campaign tweet' },
         { status: 400 }
       );
     }
