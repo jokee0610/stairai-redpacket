@@ -39,7 +39,7 @@ export default function Home() {
 
   async function handleVerify() {
     if (!publicKey || !twitterHandle.trim()) {
-      setMessage('Please connect wallet and enter Twitter handle');
+      setMessage('请连接钱包并输入推特账号 / Please connect wallet and enter Twitter handle');
       return;
     }
 
@@ -47,7 +47,7 @@ export default function Home() {
 
     try {
       setStatus('verifying');
-      setMessage('Verifying Twitter tasks...');
+      setMessage('正在验证推特... / Verifying Twitter...');
 
       const res = await fetch('/api/verify', {
         method: 'POST',
@@ -69,7 +69,7 @@ export default function Home() {
         signature: data.signature,
       });
       setStatus('success');
-      setMessage(`🧧 Verified! Claim index: #${data.claimIndex}`);
+      setMessage(`🧧 验证成功！您的红包号码: #${data.claimIndex}`);
       fetchStats();
     } catch (error: any) {
       setStatus('error');
@@ -86,8 +86,11 @@ export default function Home() {
         <h1 className="text-4xl md:text-5xl font-bold text-white mb-2 animate-float">
           🧧 StairAI 新年红包
         </h1>
-        <p className="text-xl text-white/80">
-          Chinese New Year Red Packet Campaign
+        <p className="text-lg text-white/90 mb-1">
+          500 USDT 红包大放送！
+        </p>
+        <p className="text-sm text-white/60">
+          Red Packet Giveaway · Sorteo de Sobre Rojo
         </p>
       </div>
 
@@ -97,15 +100,18 @@ export default function Home() {
           <div className="flex justify-between text-center text-white">
             <div>
               <div className="text-3xl font-bold">{stats.remaining}</div>
-              <div className="text-sm opacity-75">Remaining</div>
+              <div className="text-sm opacity-75">剩余</div>
+              <div className="text-xs opacity-50">Remaining</div>
             </div>
             <div>
               <div className="text-3xl font-bold">{stats.claimed}</div>
-              <div className="text-sm opacity-75">Claimed</div>
+              <div className="text-sm opacity-75">已领取</div>
+              <div className="text-xs opacity-50">Claimed</div>
             </div>
             <div>
               <div className="text-3xl font-bold">500</div>
-              <div className="text-sm opacity-75">USDT Pool</div>
+              <div className="text-sm opacity-75">USDT 奖池</div>
+              <div className="text-xs opacity-50">Prize Pool</div>
             </div>
           </div>
           <div className="mt-4 bg-white/20 rounded-full h-3 overflow-hidden">
@@ -121,10 +127,11 @@ export default function Home() {
       <div className="max-w-md mx-auto bg-white rounded-2xl shadow-2xl p-6 text-gray-800">
         {/* Step 1: Twitter Tasks */}
         <div className="mb-6">
-          <h2 className="text-lg font-semibold mb-3 flex items-center gap-2">
+          <h2 className="text-lg font-semibold mb-1 flex items-center gap-2">
             <span className="bg-red-500 text-white w-6 h-6 rounded-full flex items-center justify-center text-sm">1</span>
-            Complete Twitter Tasks
+            关注推特账号
           </h2>
+          <p className="text-xs text-gray-500 mb-3 ml-8">Follow on Twitter · Seguir en Twitter</p>
           <div className="space-y-2 text-sm">
             <a
               href={`https://twitter.com/${twitterAccountToFollow}`}
@@ -133,7 +140,7 @@ export default function Home() {
               className="flex items-center gap-2 p-3 bg-blue-50 rounded-lg hover:bg-blue-100 transition"
             >
               <span>👤</span>
-              <span>Follow @{twitterAccountToFollow}</span>
+              <span>关注 @{twitterAccountToFollow}</span>
               <span className="ml-auto">→</span>
             </a>
           </div>
@@ -141,24 +148,26 @@ export default function Home() {
 
         {/* Step 2: Connect Wallet */}
         <div className="mb-6">
-          <h2 className="text-lg font-semibold mb-3 flex items-center gap-2">
+          <h2 className="text-lg font-semibold mb-1 flex items-center gap-2">
             <span className="bg-red-500 text-white w-6 h-6 rounded-full flex items-center justify-center text-sm">2</span>
-            Connect Wallet
+            连接钱包
           </h2>
+          <p className="text-xs text-gray-500 mb-3 ml-8">Connect Wallet · Conectar Billetera</p>
           <WalletMultiButton className="!w-full !justify-center !rounded-lg" />
           {connected && publicKey && (
             <p className="text-xs text-green-600 mt-2 flex items-center gap-1">
-              ✓ Connected: {publicKey.toBase58().slice(0, 8)}...{publicKey.toBase58().slice(-4)}
+              ✓ 已连接: {publicKey.toBase58().slice(0, 8)}...{publicKey.toBase58().slice(-4)}
             </p>
           )}
         </div>
 
         {/* Step 3: Enter Twitter Handle */}
         <div className="mb-6">
-          <h2 className="text-lg font-semibold mb-3 flex items-center gap-2">
+          <h2 className="text-lg font-semibold mb-1 flex items-center gap-2">
             <span className="bg-red-500 text-white w-6 h-6 rounded-full flex items-center justify-center text-sm">3</span>
-            Enter Twitter Handle
+            输入推特账号
           </h2>
+          <p className="text-xs text-gray-500 mb-3 ml-8">Enter Twitter Handle · Ingresa tu Twitter</p>
           <input
             type="text"
             placeholder="@your_handle"
@@ -184,11 +193,14 @@ export default function Home() {
             disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none
           `}
         >
-          {status === 'verifying' && '🔍 Verifying...'}
-          {status === 'success' && '🎉 Verified!'}
-          {status === 'error' && '❌ Try Again'}
-          {status === 'idle' && '🧧 领取红包 Claim Red Packet'}
+          {status === 'verifying' && '🔍 验证中...'}
+          {status === 'success' && '🎉 验证成功！'}
+          {status === 'error' && '❌ 重试'}
+          {status === 'idle' && '🧧 领取红包'}
         </button>
+        <p className="text-xs text-center text-gray-400 mt-2">
+          Claim Red Packet · Reclamar Sobre Rojo
+        </p>
 
         {/* Status Message */}
         {message && (
@@ -208,16 +220,17 @@ export default function Home() {
         {/* Claim Data (for debugging/display) */}
         {claimData && status === 'success' && (
           <div className="mt-4 p-3 bg-gray-100 rounded-lg text-xs font-mono break-all">
-            <p><strong>Claim Index:</strong> {claimData.claimIndex}</p>
-            <p className="mt-1"><strong>Signature:</strong> {claimData.signature.slice(0, 20)}...</p>
+            <p><strong>红包号码 / Claim Index:</strong> #{claimData.claimIndex}</p>
+            <p className="mt-1"><strong>签名 / Signature:</strong> {claimData.signature.slice(0, 20)}...</p>
           </div>
         )}
       </div>
 
       {/* Footer */}
       <div className="text-center py-8 text-white/60 text-sm">
-        <p>Powered by StairAI × Solana</p>
-        <p className="mt-1">🐍 恭喜发财 Happy Year of the Snake 2025!</p>
+        <p className="text-white/80 text-base mb-2">🐍 恭喜发财，蛇年大吉！</p>
+        <p className="text-xs mb-1">Happy Year of the Snake · Feliz Año de la Serpiente</p>
+        <p className="mt-4 text-xs">Powered by StairAI × Solana</p>
       </div>
     </main>
   );
